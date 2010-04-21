@@ -29,6 +29,30 @@ results = c.query(attributes={'year':2009}, groups=['city'])
 
 print results.values['Atlanta'].get_data(aggregator=sum)
 >> 1425
+
+# keep in mind values don't need to be scalar. here's an example of how to use tuple to calculate a weighted average 
+# using a custom aggregator function
+
+c = Cube()
+
+c.add({'dim1':'A', 'dim2':'1'}, (1000, 10))
+c.add({'dim1':'B', 'dim2':'2'}, (750, 15))
+c.add({'dim1':'C', 'dim2':'3'}, (800, 12))
+
+results = c.query()
+
+def weighted_avg(data):
+
+    weighting_factor_sum = reduce(lambda total, value: total + value[1], data, 0)
+    
+    weighted_value_sum = reduce(lambda total, value: total + (value[0] * value[1]), data, 0)
+    
+    return weighted_value_sum / weighting_factor_sum
+
+
+print results.get_data(aggregator=weighted_avg)
+>> 833
+
 """
 
 
@@ -177,16 +201,4 @@ class Cube:
         return slice 
             
             
-#c = Cube()
-#
-#c.add({'catA':1,'catB':1,'catC':1}, {'a':1})
-#c.add({'catA':2,'catB':1,'catC':1}, {'a':5})
-#c.add({'catA':2,'catB':2,'catC':1}, {'a':3})
-#c.add({'catA':2,'catB':2,'catC':2}, {'a':4})
-#c.add({'catA':2,'catB':2,'catC':3}, {'a':5})
-#
-#q = c.query(groups=['catA', 'catB'])
-#
-#print q
-
 
