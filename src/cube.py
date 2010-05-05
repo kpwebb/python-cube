@@ -30,7 +30,8 @@ results = c.query(attributes={'year':2009}, groups=['city'])
 print results.values['Atlanta'].get_data(aggregator=sum)
 >> 1425
 
-# data can be group hierarchically
+
+# data can be grouped hierarchically
 
 results = c.query(groups=['city', 'year'])
 
