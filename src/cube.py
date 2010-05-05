@@ -30,6 +30,18 @@ results = c.query(attributes={'year':2009}, groups=['city'])
 print results.values['Atlanta'].get_data(aggregator=sum)
 >> 1425
 
+# data can be group hierarchically
+
+results = c.query(groups=['city', 'year'])
+
+print results.values['Atlanta'].values[2009].get_data(aggregator=sum)
+>> 1425
+
+print results.values['Atlanta'].values[2008].get_data(aggregator=sum)
+>> 800
+
+
+
 # keep in mind values don't need to be scalar. here's an example of how to use tuple to calculate a weighted average 
 # using a custom aggregator function
 
